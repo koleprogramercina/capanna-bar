@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /ops-7429x.html
+
+Sitemap: https://capannabar.rs/sitemap.xml
