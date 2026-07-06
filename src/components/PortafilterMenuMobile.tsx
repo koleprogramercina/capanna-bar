@@ -197,8 +197,8 @@ export default function PortafilterMenuMobile({ onClose }: Props) {
       <div
         className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-between z-10"
         style={{
-          top: '215px',
-          height: '310px',
+          top: '212px',
+          height: '280px',
           width: '220px',
         }}
       >

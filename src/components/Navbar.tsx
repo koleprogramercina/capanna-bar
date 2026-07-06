@@ -123,11 +123,15 @@ export default function Navbar() {
           }`}
         />
 
-        <div className="relative flex h-full flex-col items-center justify-start pt-4">
+        <div className="relative z-10 flex h-full flex-col items-center justify-start overflow-y-auto px-4 pb-36 pt-4">
           {isBeach ? <ShakerMenuMobile onClose={() => setMenuOpen(false)} /> : <PortafilterMenuMobile onClose={() => setMenuOpen(false)} />}
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 px-6 pb-6">
+        <div className={`absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-7 ${
+          isBeach
+            ? 'bg-gradient-to-t from-[#041410] via-[#041410]/96 to-transparent'
+            : 'bg-gradient-to-t from-[#0a0705] via-[#0a0705]/96 to-transparent'
+        }`}>
           <a
             href="https://instagram.com/capannabar"
             target="_blank"

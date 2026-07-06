@@ -148,17 +148,17 @@ export default function ShakerMenuMobile({ onClose }: Props) {
             <Home
               size={20}
               className={`transition-all group-hover:scale-110 ${
-                isActive ? 'text-[#ff4e50]' : 'text-[#0d2b26]'
+                isActive ? 'text-[#00877a]' : 'text-[#0d2b26]'
               }`}
             />
             <span
               className={`text-[10px] font-bold tracking-[0.08em] mt-0.5 whitespace-nowrap ${
-                isActive ? 'text-[#ff4e50]' : 'text-[#0d2b26]'
+                isActive ? 'text-[#00877a]' : 'text-[#0d2b26]'
               }`}
             >
               {text('POČETNA', 'HOME')}
             </span>
-            {isActive && <div className="w-3 h-[1px] bg-[#ff4e50] mt-0.5" />}
+            {isActive && <div className="w-3 h-[1px] bg-[#00877a] mt-0.5" />}
           </div>
         )}
       </NavLink>
@@ -167,8 +167,8 @@ export default function ShakerMenuMobile({ onClose }: Props) {
       <div
         className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-between z-10"
         style={{
-          top: '210px',
-          height: '340px',
+          top: '205px',
+          height: '300px',
           width: '200px',
         }}
       >
@@ -184,7 +184,7 @@ export default function ShakerMenuMobile({ onClose }: Props) {
               <div className="flex flex-col items-center justify-center">
                 <div
                   className={`transition-all group-hover:scale-110 ${
-                    isActive ? 'text-[#ff4e50]' : 'text-[#0d2b26]'
+                    isActive ? 'text-[#00877a]' : 'text-[#0d2b26]'
                   }`}
                   style={{ filter: 'drop-shadow(0 1px 1px rgba(255,255,255,0.5))' }}
                 >
@@ -192,13 +192,13 @@ export default function ShakerMenuMobile({ onClose }: Props) {
                 </div>
                 <span
                   className={`text-[12px] font-bold tracking-[0.12em] mt-1 whitespace-nowrap ${
-                    isActive ? 'text-[#ff4e50]' : 'text-[#0d2b26]'
+                    isActive ? 'text-[#00877a]' : 'text-[#0d2b26]'
                   }`}
                   style={{ textShadow: '0 1px 1px rgba(255,255,255,0.3)' }}
                 >
                   {item.label}
                 </span>
-                {isActive && <div className="w-4 h-[1px] bg-[#ff4e50] mt-1" />}
+                {isActive && <div className="w-4 h-[1px] bg-[#00877a] mt-1" />}
               </div>
             )}
           </NavLink>
