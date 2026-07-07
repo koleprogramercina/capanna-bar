@@ -4,8 +4,9 @@ import { useLanguage } from '../context/LanguageContext';
 import { QRCodeSVG as QRCode } from 'qrcode.react';
 import Footer from '../components/Footer';
 import { getMenus, MenuCategory, MenuItem, onMenusChanged } from '../utils/menuStore';
+import { PUBLIC_SITE_URL } from '../config';
 
-const PUBLIC_MENU_URL = 'https://capannabar.rs/#/meni';
+const PUBLIC_MENU_URL = `${PUBLIC_SITE_URL}/#/meni`;
 
 const categoryTranslations: Record<string, string> = {
   kafa: 'Coffee',
@@ -290,7 +291,7 @@ export default function MenuPage() {
                   rel="noopener noreferrer"
                   className={`mt-2 block truncate text-center text-[11px] ${isBeach ? 'text-[#42f5df]/80' : 'text-[#f0c84d]/80'}`}
                 >
-                  capannabar.rs/#/meni
+                  {PUBLIC_MENU_URL.replace('https://', '')}
                 </a>
                 <button
                   onClick={() => setShowQR(false)}

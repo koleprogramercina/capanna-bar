@@ -39,5 +39,8 @@ export const EMAILJS_SERVICE_ID = '';
 export const EMAILJS_TEMPLATE_REQUEST = '';
 export const EMAILJS_TEMPLATE_APPROVED = '';
 
-/** Javna adresa sajta (koristi se za QR meni i email linkove). */
-export const PUBLIC_SITE_URL = 'https://capannabar.rs';
+/**
+ * Javna adresa sajta (koristi se za QR meni i email linkove).
+ * Kada stigne pravi domen (npr. capannabar.rs), promeni samo ovu liniju.
+ */
+export const PUBLIC_SITE_URL = 'https://koleprogramercina.github.io/capanna-bar';

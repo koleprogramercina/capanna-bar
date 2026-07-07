@@ -89,8 +89,8 @@ function StaffGate({ onAuth }: { onAuth: () => void }) {
           <p className="mt-5 max-w-md text-sm leading-relaxed text-white/58">
             Panel je za zaposlene. Prvo se aktivira licencni ključ, zatim svaki član osoblja koristi svoje korisničko ime i šifru.
           </p>
-          <div className="mt-6 rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm text-amber-100">
-            Početni vlasnički ključ: <span className="font-bold tracking-wider">CAPANNA-OWNER-2026</span>
+          <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-4 text-sm text-white/45">
+            Nemaš ključ? Zatraži ga od vlasnika — generiše se u panelu, u sekciji „Licencni ključevi za osoblje".
           </div>
         </div>
 
