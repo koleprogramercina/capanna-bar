@@ -13,10 +13,10 @@ const hours = {
     { day: 'Nedeljom', open: '10:00', close: '22:00' },
   ],
   beach: [
-    { day: 'Ponedeljak – Četvrtak', open: '10:00', close: '00:00' },
-    { day: 'Petak', open: '10:00', close: '02:00' },
-    { day: 'Subota', open: '09:00', close: '03:00' },
-    { day: 'Nedeljom', open: '09:00', close: '00:00' },
+    { day: 'Ponedeljak – Četvrtak', open: '07:30', close: '00:00' },
+    { day: 'Petak', open: '07:30', close: '01:00' },
+    { day: 'Subota', open: '07:30', close: '01:00' },
+    { day: 'Nedeljom', open: '08:00', close: '00:00' },
   ],
 };
 
