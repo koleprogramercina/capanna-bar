@@ -158,7 +158,7 @@ export default function ShakerMenuMobile({ onClose }: Props) {
             >
               {text('POČETNA', 'HOME')}
             </span>
-            {isActive && <div className="w-3 h-[1px] bg-[#00877a] mt-0.5" />}
+            {isActive && <div className="w-3 h-[2px] rounded-full bg-[#00877a] mt-0.5" />}
           </div>
         )}
       </NavLink>
@@ -198,7 +198,7 @@ export default function ShakerMenuMobile({ onClose }: Props) {
                 >
                   {item.label}
                 </span>
-                {isActive && <div className="w-4 h-[1px] bg-[#00877a] mt-1" />}
+                {isActive && <div className="w-4 h-[2px] rounded-full bg-[#00877a] mt-1" />}
               </div>
             )}
           </NavLink>

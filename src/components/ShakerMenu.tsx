@@ -140,16 +140,16 @@ export default function ShakerMenu() {
           <div className="flex flex-col items-center justify-center">
             <Home 
               size={13} 
-              className={`transition-all group-hover:scale-110 ${isActive ? 'text-[#ff4e50]' : 'text-[#0d2b26]'}`}
+              className={`transition-all group-hover:scale-110 ${isActive ? 'text-[#00877a]' : 'text-[#0d2b26]'}`}
               style={{ filter: 'drop-shadow(0 1px 1px rgba(255,255,255,0.5))' }}
             />
             <span 
-              className={`text-[7px] font-bold tracking-[0.04em] mt-0.5 whitespace-nowrap ${isActive ? 'text-[#ff4e50]' : 'text-[#0d2b26]'}`}
+              className={`text-[7px] font-bold tracking-[0.04em] mt-0.5 whitespace-nowrap ${isActive ? 'text-[#00877a]' : 'text-[#0d2b26]'}`}
             >
               {text('POČETNA', 'HOME')}
             </span>
             {isActive && (
-              <div className="w-3 h-[1px] bg-[#ff4e50] mt-0.5" />
+              <div className="w-4 h-[2px] rounded-full bg-[#00877a] mt-0.5" />
             )}
           </div>
         )}
@@ -167,19 +167,19 @@ export default function ShakerMenu() {
             {({ isActive }) => (
               <div className="flex flex-col items-center justify-center">
                 <div 
-                  className={`transition-all group-hover:scale-110 ${isActive ? 'text-[#ff4e50]' : 'text-[#0d2b26]'}`}
+                  className={`transition-all group-hover:scale-110 ${isActive ? 'text-[#00877a]' : 'text-[#0d2b26]'}`}
                   style={{ filter: 'drop-shadow(0 1px 1px rgba(255,255,255,0.5))' }}
                 >
                   {item.icon}
                 </div>
                 <span 
-                  className={`text-[8px] font-bold tracking-[0.15em] mt-0.5 ${isActive ? 'text-[#ff4e50]' : 'text-[#0d2b26]'}`}
+                  className={`text-[8px] font-bold tracking-[0.15em] mt-0.5 ${isActive ? 'text-[#00877a]' : 'text-[#0d2b26]'}`}
                   style={{ textShadow: '0 1px 1px rgba(255,255,255,0.3)' }}
                 >
                   {item.label}
                 </span>
                 {isActive && (
-                  <div className="w-3 h-[1px] bg-[#ff4e50] mt-0.5" />
+                  <div className="w-4 h-[2px] rounded-full bg-[#00877a] mt-0.5" />
                 )}
               </div>
             )}

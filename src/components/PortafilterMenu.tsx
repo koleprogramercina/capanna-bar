@@ -134,7 +134,7 @@ export default function PortafilterMenu() {
               {text('POČETNA', 'HOME')}
             </span>
             {isActive && (
-              <div className="w-3 h-[1px] bg-[#d4af37] mt-0.5" />
+              <div className="w-4 h-[2px] rounded-full bg-[#d4af37] mt-0.5" />
             )}
           </div>
         )}
@@ -160,7 +160,7 @@ export default function PortafilterMenu() {
                   {item.label}
                 </span>
                 {isActive && (
-                  <div className="w-3 h-[1px] bg-[#d4af37] mt-0.5" />
+                  <div className="w-4 h-[2px] rounded-full bg-[#d4af37] mt-0.5" />
                 )}
               </div>
             )}

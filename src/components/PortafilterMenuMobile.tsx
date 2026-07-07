@@ -188,7 +188,7 @@ export default function PortafilterMenuMobile({ onClose }: Props) {
             >
               {text('POČETNA', 'HOME')}
             </span>
-            {isActive && <div className="w-4 h-[1px] bg-[#d4af37] mt-1" />}
+            {isActive && <div className="w-4 h-[2px] rounded-full bg-[#d4af37] mt-1" />}
           </div>
         )}
       </NavLink>
@@ -228,7 +228,7 @@ export default function PortafilterMenuMobile({ onClose }: Props) {
                 >
                   {item.label}
                 </span>
-                {isActive && <div className="w-4 h-[1px] bg-[#d4af37] mt-1" />}
+                {isActive && <div className="w-4 h-[2px] rounded-full bg-[#d4af37] mt-1" />}
               </div>
             )}
           </NavLink>
