@@ -139,9 +139,11 @@ canvas {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Napomena: horizontalno centriranje radi Tailwind preko `translate` svojstva,
+   zato ovde NE sme translateX — transform i translate se sabiraju. */
 @keyframes navSvgIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(14px) scale(0.97); }
-  to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ─── Scroll reveal ─── */
