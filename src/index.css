@@ -122,6 +122,28 @@ canvas {
   100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
 }
 
+/* ─── Mobilni meni: stagger ulazak stavki ─── */
+@media (prefers-reduced-motion: no-preference) {
+  .nav-item-in {
+    opacity: 0;
+    animation: navItemIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .nav-svg-in {
+    animation: navSvgIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes navItemIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes navSvgIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(14px) scale(0.97); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
 /* ─── Scroll reveal ─── */
 .reveal-pending {
   opacity: 0;

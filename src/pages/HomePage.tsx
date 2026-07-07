@@ -210,8 +210,8 @@ export default function HomePage() {
               to="/meni"
               className={`px-7 py-3 rounded-full text-sm font-semibold tracking-wider uppercase transition-all duration-300 hover:scale-105 active:scale-95 ${
                 isBeach
-                  ? 'bg-gradient-to-r from-[#00a896] to-[#02c8b3] text-white shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50'
-                  : 'bg-gradient-to-r from-[#d4af37] to-[#a07f20] text-[#1a110b] shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50'
+                  ? 'bg-gradient-to-r from-[#00a896] to-[#02c8b3] text-white shadow-lg shadow-teal-500/30 hover:shadow-[0_0_34px_rgba(0,214,192,0.5),0_10px_24px_rgba(0,0,0,0.35)]'
+                  : 'bg-gradient-to-r from-[#d4af37] to-[#a07f20] text-[#1a110b] shadow-lg shadow-amber-500/30 hover:shadow-[0_0_34px_rgba(212,175,55,0.5),0_10px_24px_rgba(0,0,0,0.35)]'
               }`}
             >
               {isBeach ? text('Vidi Koktele', 'See Cocktails') : text('Vidi Meni', 'See Menu')}
@@ -220,8 +220,8 @@ export default function HomePage() {
               to="/kontakt"
               className={`px-7 py-3 rounded-full text-sm font-semibold tracking-wider uppercase border transition-all duration-300 hover:scale-105 active:scale-95 ${
                 isBeach
-                  ? 'border-[#00a896]/50 text-[#00a896] hover:bg-[#00a896]/10'
-                  : 'border-[#d4af37]/50 text-[#d4af37] hover:bg-[#d4af37]/10'
+                  ? 'border-[#00a896]/50 text-[#00a896] hover:border-[#00d6c0] hover:bg-[#00a896]/10 hover:shadow-[0_0_24px_rgba(0,214,192,0.28)]'
+                  : 'border-[#d4af37]/50 text-[#d4af37] hover:border-[#f0c84d] hover:bg-[#d4af37]/10 hover:shadow-[0_0_24px_rgba(212,175,55,0.28)]'
               }`}
             >
               {text('Rezerviši', 'Book')}

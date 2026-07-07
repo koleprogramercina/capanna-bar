@@ -124,7 +124,7 @@ export default function Navbar() {
         />
 
         <div className="relative z-10 flex h-full flex-col items-center justify-start overflow-y-auto px-4 pb-36 pt-4">
-          {isBeach ? <ShakerMenuMobile onClose={() => setMenuOpen(false)} /> : <PortafilterMenuMobile onClose={() => setMenuOpen(false)} />}
+          {menuOpen && (isBeach ? <ShakerMenuMobile onClose={() => setMenuOpen(false)} /> : <PortafilterMenuMobile onClose={() => setMenuOpen(false)} />)}
         </div>
 
         <div className={`absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-7 ${

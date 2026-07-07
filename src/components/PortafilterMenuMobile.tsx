@@ -23,7 +23,7 @@ export default function PortafilterMenuMobile({ onClose }: Props) {
     >
       <svg
         viewBox="0 0 280 660"
-        className="absolute left-1/2 top-0 -translate-x-1/2"
+        className="nav-svg-in absolute left-1/2 top-0 -translate-x-1/2"
         style={{
           width: '290px',
           height: '600px',
@@ -172,7 +172,7 @@ export default function PortafilterMenuMobile({ onClose }: Props) {
         style={{ top: '80px' }}
       >
         {({ isActive }) => (
-          <div className="flex flex-col items-center justify-center">
+          <div className="nav-item-in flex flex-col items-center justify-center" style={{ animationDelay: '120ms' }}>
             <Home
               size={22}
               className={`transition-all group-hover:scale-110 ${
@@ -202,7 +202,7 @@ export default function PortafilterMenuMobile({ onClose }: Props) {
           width: '220px',
         }}
       >
-        {menuItems.map((item) => (
+        {menuItems.map((item, index) => (
           <NavLink
             key={item.to}
             to={item.to}
@@ -211,7 +211,7 @@ export default function PortafilterMenuMobile({ onClose }: Props) {
             className="flex flex-col items-center justify-center group"
           >
             {({ isActive }) => (
-              <div className="flex flex-col items-center justify-center">
+              <div className="nav-item-in flex flex-col items-center justify-center" style={{ animationDelay: `${200 + index * 70}ms` }}>
                 <div
                   className={`transition-all group-hover:scale-110 ${
                     isActive ? 'text-[#d4af37]' : 'text-white'

@@ -24,7 +24,7 @@ export default function ShakerMenuMobile({ onClose }: Props) {
       {/* SHAKER — realistic squat proportions matching reference photo */}
       <svg
         viewBox="0 0 280 620"
-        className="absolute left-1/2 top-4 -translate-x-1/2"
+        className="nav-svg-in absolute left-1/2 top-4 -translate-x-1/2"
         style={{
           width: '280px',
           height: '600px',
@@ -144,7 +144,7 @@ export default function ShakerMenuMobile({ onClose }: Props) {
         style={{ top: '100px' }}
       >
         {({ isActive }) => (
-          <div className="flex flex-col items-center justify-center">
+          <div className="nav-item-in flex flex-col items-center justify-center" style={{ animationDelay: '120ms' }}>
             <Home
               size={20}
               className={`transition-all group-hover:scale-110 ${
@@ -172,7 +172,7 @@ export default function ShakerMenuMobile({ onClose }: Props) {
           width: '200px',
         }}
       >
-        {menuItems.map((item) => (
+        {menuItems.map((item, index) => (
           <NavLink
             key={item.to}
             to={item.to}
@@ -181,7 +181,7 @@ export default function ShakerMenuMobile({ onClose }: Props) {
             className="flex flex-col items-center justify-center group"
           >
             {({ isActive }) => (
-              <div className="flex flex-col items-center justify-center">
+              <div className="nav-item-in flex flex-col items-center justify-center" style={{ animationDelay: `${200 + index * 70}ms` }}>
                 <div
                   className={`transition-all group-hover:scale-110 ${
                     isActive ? 'text-[#00877a]' : 'text-[#0d2b26]'
