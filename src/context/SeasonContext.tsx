@@ -15,14 +15,10 @@ interface SeasonContextType {
 
 const SeasonContext = createContext<SeasonContextType | null>(null);
 
+// Sezonu koju posetioci vide određuje ISKLJUČIVO vlasnik iz admin panela
+// (capanna-active-season). Posetioci je ne mogu menjati.
 function getDefaultSeason(): Season {
-  // Vlasnikova aktivna sezona je autoritativna za početni prikaz.
-  if (localStorage.getItem('capanna-active-season')) return getActiveSeason();
-  const stored = localStorage.getItem('capanna-season');
-  if (stored === 'beach' || stored === 'city') return stored;
-  const month = new Date().getMonth(); // 0-indexed
-  // May(4) – September(8) => beach, October(9)–April(3) => city
-  return month >= 4 && month <= 8 ? 'beach' : 'city';
+  return getActiveSeason();
 }
 
 export function SeasonProvider({ children }: { children: ReactNode }) {
@@ -30,7 +26,6 @@ export function SeasonProvider({ children }: { children: ReactNode }) {
   const [activeSeason, setActiveSeasonState] = useState<Season>(getActiveSeason);
 
   useEffect(() => {
-    localStorage.setItem('capanna-season', season);
     document.documentElement.setAttribute('data-season', season);
   }, [season]);
 
@@ -38,16 +33,16 @@ export function SeasonProvider({ children }: { children: ReactNode }) {
     const refresh = (event: Event) => {
       const detail = (event as CustomEvent).detail;
       if (detail && detail !== 'capanna-active-season') return;
+      // Javni prikaz uvek prati vlasnikovu aktivnu sezonu.
       const next = getActiveSeason();
-      setActiveSeasonState(previous => {
-        if (previous !== next) setSeasonState(next);
-        return next;
-      });
+      setActiveSeasonState(next);
+      setSeasonState(next);
     };
     window.addEventListener('capanna-data-updated', refresh);
     return () => window.removeEventListener('capanna-data-updated', refresh);
   }, []);
 
+  // setSeason/toggleSeason zadržani su za admin panel (StaffPortal); javni sajt ih ne koristi.
   const setSeason = (s: Season) => setSeasonState(s);
   const toggleSeason = () => setSeasonState(prev => prev === 'city' ? 'beach' : 'city');
 

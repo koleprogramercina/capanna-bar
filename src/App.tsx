@@ -59,37 +59,6 @@ function ScrollReveal() {
   return null;
 }
 
-function SeasonNotice() {
-  const { season, activeSeason, setSeason } = useSeason();
-  if (season === activeSeason) return null;
-  const beachActive = activeSeason === 'beach';
-  return (
-    <div className="fixed inset-x-0 top-16 z-40 flex justify-center px-4 lg:top-20">
-      <div
-        className={`mt-2 flex max-w-2xl flex-wrap items-center justify-center gap-x-3 gap-y-2 rounded-2xl border px-4 py-2.5 text-center text-xs font-medium shadow-xl backdrop-blur-xl sm:text-sm ${
-          beachActive
-            ? 'border-[#00d6c0]/30 bg-[#04120f]/85 text-white/85'
-            : 'border-[#d4af37]/30 bg-[#0d0804]/85 text-[#f5e6c8]/85'
-        }`}
-      >
-        <span>
-          {beachActive
-            ? '🌊 Trenutno je letnja sezona — radimo na Brioni plaži, lokal na Kuzminskoj 1 je zatvoren.'
-            : '☕ Trenutno je cafe sezona — radimo na Kuzminskoj 1, beach bar je zatvoren do leta.'}
-        </span>
-        <button
-          onClick={() => setSeason(activeSeason)}
-          className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${
-            beachActive ? 'bg-[#00a896] text-white' : 'bg-[#d4af37] text-[#1a110b]'
-          }`}
-        >
-          Vidi aktivnu
-        </button>
-      </div>
-    </div>
-  );
-}
-
 function PageTransition({ children }: { children: React.ReactNode }) {
 const { pathname } = useLocation();
 const [visible, setVisible] = useState(true);
@@ -128,7 +97,6 @@ return (
 <CursorTrail />
 <AmbientEffect />
 <Navbar />
-<SeasonNotice />
 <FloatingInstagram />
 <AnnouncementPopup />
 <PageTransition>

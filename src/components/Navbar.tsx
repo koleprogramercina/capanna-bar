@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Coffee, Martini, Sparkles } from 'lucide-react';
+import { Coffee, Martini } from 'lucide-react';
 import { useSeason } from '../context/SeasonContext';
 import { useLanguage } from '../context/LanguageContext';
 import PortafilterMenu from './PortafilterMenu';
@@ -10,7 +10,7 @@ import ShakerMenuMobile from './ShakerMenuMobile';
 import BrandLogo from './BrandLogo';
 
 export default function Navbar() {
-  const { isBeach, toggleSeason } = useSeason();
+  const { isBeach } = useSeason();
   const { language, toggleLanguage, text } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -70,24 +70,20 @@ export default function Navbar() {
             </span>
           </button>
 
-          <button
-            onClick={toggleSeason}
-            className={`season-toggle ${isBeach ? 'season-toggle--beach' : 'season-toggle--city'}`}
-            aria-label={isBeach ? text('Prebaci na cafe sezonu', 'Switch to cafe season') : text('Prebaci na beach sezonu', 'Switch to beach season')}
-            title={isBeach ? text('Prebaci na cafe sezonu', 'Switch to cafe season') : text('Prebaci na beach sezonu', 'Switch to beach season')}
+          {/* Statički indikator aktivnog lokala — prikaz sezonom upravlja isključivo vlasnik iz admin panela */}
+          <div
+            className={`flex h-9 items-center gap-2 rounded-full border px-3 text-xs font-bold uppercase tracking-widest transition-all ${
+              isBeach
+                ? 'border-[#00d6c0]/30 bg-[#06241f]/70 text-white'
+                : 'border-[#d4af37]/30 bg-[#1a110b]/70 text-[#f5e6c8]'
+            }`}
+            title={isBeach ? text('Trenutno radi: Brioni plaža', 'Currently open: Brioni Beach') : text('Trenutno radi: Kuzminska 1', 'Currently open: Kuzminska 1')}
           >
-            <span className="season-toggle__label hidden sm:inline">{isBeach ? 'Beach' : 'Cafe'}</span>
-            <span className="season-toggle__track">
-              <span className="season-toggle__trail" />
-              <span className="season-toggle__spark season-toggle__spark--one" />
-              <span className="season-toggle__spark season-toggle__spark--two" />
-              <span className="season-toggle__spark season-toggle__spark--three" />
-              <span className="season-toggle__thumb">
-                {isBeach ? <Martini size={16} strokeWidth={2.4} /> : <Coffee size={16} strokeWidth={2.4} />}
-              </span>
+            <span className={`grid h-6 w-6 place-items-center rounded-full ${isBeach ? 'bg-[#00a896] text-white' : 'bg-[#d4af37] text-[#1a110b]'}`}>
+              {isBeach ? <Martini size={14} strokeWidth={2.4} /> : <Coffee size={14} strokeWidth={2.4} />}
             </span>
-            <Sparkles className="season-toggle__glint hidden sm:block" size={14} strokeWidth={2.2} />
-          </button>
+            <span className="hidden sm:inline">{isBeach ? 'Beach' : 'Cafe'}</span>
+          </div>
 
           <button
             onClick={() => setMenuOpen((open) => !open)}
