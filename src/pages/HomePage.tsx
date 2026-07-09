@@ -439,7 +439,7 @@ export default function HomePage() {
               isBeach ? 'ring-1 ring-[#00a896]/20' : 'ring-1 ring-[#d4af37]/20'
             }`}>
               <img
-                src={isBeach ? 'images/beach-cocktail.jpg' : 'images/espresso.jpg'}
+                src={isBeach ? 'images/beach-cocktail.jpg' : 'images/capanna-kuzminska-terrace.jpg'}
                 alt="Capanna signature drink"
                 loading="lazy"
                 decoding="async"
