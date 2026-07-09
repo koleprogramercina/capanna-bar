@@ -19,7 +19,7 @@ export interface TableSpot {
   seats: number;
 }
 
-export const MAP_BACKGROUND_IMAGE = 'images/gallery-beach.jpg';
+export const MAP_BACKGROUND_IMAGE = 'images/beach-loungers.jpg';
 
 export const beachTables: TableSpot[] = [
   { id: 'S1', label: 'S1', zone: 'Suncobrani', x: 13, y: 28, seats: 4 },

@@ -16,12 +16,15 @@ const galleryItems: GalleryItem[] = [
   { src: 'images/capanna-kuzminska-interior.jpg', alt: 'Capanna enterijer u Kuzminskoj', altEn: 'Capanna interior in Kuzminska', tag: 'City Lounge', tagEn: 'City Lounge', span: 'wide', season: 'city' },
   { src: 'images/espresso.jpg', alt: 'Signature espresso', altEn: 'Signature espresso', tag: 'Premium Kafa', tagEn: 'Premium Coffee', span: 'normal', season: 'city' },
   { src: 'images/capanna-kuzminska-terrace.jpg', alt: 'Capanna terasa u Kuzminskoj', altEn: 'Capanna terrace in Kuzminska', tag: 'Noćni Ambijent', tagEn: 'Night Atmosphere', span: 'tall', season: 'city' },
-  { src: 'images/beach-bar.jpg', alt: 'Brioni Beach Bar', altEn: 'Brioni Beach Bar', tag: 'Brioni Beach', tagEn: 'Brioni Beach', span: 'wide', season: 'beach' },
-  { src: 'images/cocktail.jpg', alt: 'Signature koktel', altEn: 'Signature cocktail', tag: 'Signature Kokteli', tagEn: 'Signature Cocktails', span: 'normal', season: 'beach' },
-  { src: 'images/gallery-beach.jpg', alt: 'Beach party', altEn: 'Beach party', tag: 'Beach Party', tagEn: 'Beach Party', span: 'large', season: 'beach' },
-  { src: 'images/capanna-kuzminska-interior.jpg', alt: 'Detalji bara', altEn: 'Bar details', tag: 'Detalji', tagEn: 'Details', span: 'normal', season: 'both' },
+  { src: 'images/beach-bar-night.jpg', alt: 'Capanna Bar on the Beach noću', altEn: 'Capanna Bar on the Beach at night', tag: 'Brioni Beach', tagEn: 'Brioni Beach', span: 'wide', season: 'beach' },
+  { src: 'images/beach-cocktail.jpg', alt: 'Koktel uz reku Savu', altEn: 'Cocktail by the Sava river', tag: 'Signature Kokteli', tagEn: 'Signature Cocktails', span: 'normal', season: 'beach' },
+  { src: 'images/beach-loungers.jpg', alt: 'Ležaljke i suncobrani na plaži', altEn: 'Sun loungers and umbrellas on the beach', tag: 'Plaža', tagEn: 'Beach', span: 'large', season: 'beach' },
+  { src: 'images/beach-sign.jpg', alt: 'Capanna Bar neon', altEn: 'Capanna Bar neon sign', tag: 'Detalji', tagEn: 'Details', span: 'normal', season: 'beach' },
   { src: 'images/espresso.jpg', alt: 'Latte art', altEn: 'Latte art', tag: 'Latte Art', tagEn: 'Latte Art', span: 'normal', season: 'city' },
-  { src: 'images/cocktail.jpg', alt: 'Tropska pića', altEn: 'Tropical drinks', tag: 'Tropska Pića', tagEn: 'Tropical Drinks', span: 'wide', season: 'beach' },
+  { src: 'images/beach-drinks.jpg', alt: 'Tropska pića u tiki čašama', altEn: 'Tropical drinks in tiki glasses', tag: 'Tropska Pića', tagEn: 'Tropical Drinks', span: 'wide', season: 'beach' },
+  { src: 'images/beach-food.jpg', alt: 'Capanna hrana', altEn: 'Capanna food', tag: 'Hrana', tagEn: 'Food', span: 'normal', season: 'beach' },
+  { src: 'images/beach-terrace.jpg', alt: 'Terasa uz reku', altEn: 'Terrace by the river', tag: 'Ambijent', tagEn: 'Atmosphere', span: 'tall', season: 'beach' },
+  { src: 'images/beach-coffee.jpg', alt: 'Kafa na plaži', altEn: 'Coffee on the beach', tag: 'Jutarnja Kafa', tagEn: 'Morning Coffee', span: 'normal', season: 'beach' },
 ];
 
 const filters = ['Sve', 'City Bar', 'Brioni Beach', 'Pića'];

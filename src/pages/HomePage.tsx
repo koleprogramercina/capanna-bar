@@ -155,6 +155,18 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(212,175,55,0.20),transparent_36%),radial-gradient(circle_at_50%_58%,rgba(0,0,0,0.08),rgba(0,0,0,0.72)_68%)]" />
         </div>
 
+        {/* Real beach venue photo (Capanna Bar on the Beach neon) — blago zatamnjeno da tekst ostane čitljiv */}
+        <div className={`absolute inset-0 transition-opacity duration-1000 ${isBeach ? 'opacity-100' : 'opacity-0'}`}>
+          <img
+            src="images/beach-hero-bg.jpg"
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-cover scale-105 opacity-60 saturate-110 contrast-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#041410]/55 via-[#041410]/22 to-[#041410]/78" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(0,168,150,0.16),transparent_40%),radial-gradient(circle_at_50%_60%,rgba(0,0,0,0.06),rgba(0,0,0,0.6)_70%)]" />
+        </div>
+
         {/* Ambient light orbs */}
         <div className={`absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl transition-all duration-1000 pointer-events-none ${
           isBeach ? 'bg-[#00a896]/8' : 'bg-[#d4af37]/6'
@@ -269,7 +281,7 @@ export default function HomePage() {
           >
             {/* Background image */}
             <img
-              src={isBeach ? 'images/beach-bar.jpg' : 'images/capanna-kuzminska-interior.jpg'}
+              src={isBeach ? 'images/beach-terrace.jpg' : 'images/capanna-kuzminska-interior.jpg'}
               alt="Capanna Bar"
               loading="lazy"
               decoding="async"
@@ -427,7 +439,7 @@ export default function HomePage() {
               isBeach ? 'ring-1 ring-[#00a896]/20' : 'ring-1 ring-[#d4af37]/20'
             }`}>
               <img
-                src={isBeach ? 'images/cocktail.jpg' : 'images/espresso.jpg'}
+                src={isBeach ? 'images/beach-cocktail.jpg' : 'images/espresso.jpg'}
                 alt="Capanna signature drink"
                 loading="lazy"
                 decoding="async"
@@ -482,7 +494,7 @@ export default function HomePage() {
             isBeach ? 'ring-1 ring-[#00a896]/20' : 'ring-1 ring-[#d4af37]/20'
           }`}>
             <img
-                src={isBeach ? 'images/gallery-beach.jpg' : 'images/capanna-kuzminska-terrace.jpg'}
+                src={isBeach ? 'images/beach-food.jpg' : 'images/capanna-kuzminska-terrace.jpg'}
               alt={text('Capanna hrana i piće', 'Capanna food and drinks')}
               loading="lazy"
               decoding="async"
