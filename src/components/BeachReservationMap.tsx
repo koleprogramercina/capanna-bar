@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { createReservation, getReservations, ReservationRequest } from '../utils/staffStore';
 import { isEmailConfigured } from '../utils/emailService';
-import { beachTables, isPartyNight, PARTY_CUTOFF, TableSpot, TableZone, zoneLabels } from '../data/tables';
+import { beachTables, donjiDividers, isPartyNight, PARTY_CUTOFF, TableSpot, TableZone, zoneLabels } from '../data/tables';
 
 const MIN_LEAD_MINUTES = 90;
 
@@ -176,12 +176,25 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
         >
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_15%,rgba(0,168,150,0.14),transparent_42%)]" />
 
-          {/* Šank — samo u gornjem delu */}
+          {/* Šank — gore u sredini gornjeg dela, kao na mapi */}
           {zone === 'gornji' && (
-            <div className="absolute right-[4%] top-[4%] flex h-[10%] w-[34%] items-center justify-center rounded-lg border border-[#d4af37]/40 bg-gradient-to-r from-[#8B5E3C]/60 to-[#d4af37]/30 text-[11px] font-bold uppercase tracking-[0.3em] text-[#f0c84d]">
-            🍸 Šank
+            <div className="absolute left-[31%] top-[2%] h-[12%] w-[27%]">
+              <div className="flex h-full w-full items-center justify-center rounded-b-xl rounded-t-md border border-[#d4af37]/40 bg-gradient-to-b from-[#8B5E3C]/60 to-[#d4af37]/25 text-[11px] font-bold uppercase tracking-[0.3em] text-[#f0c84d]">
+                🍸 Šank
+              </div>
+              <div className="absolute left-1/2 top-full h-[40%] w-[18%] -translate-x-1/2 rounded-b-md border border-t-0 border-[#d4af37]/40 bg-[#8B5E3C]/40" />
             </div>
           )}
+
+          {/* Pregrade u donjem delu, kao na mapi */}
+          {zone === 'donji' &&
+            donjiDividers.map((wall, index) => (
+              <div
+                key={index}
+                className="pointer-events-none absolute w-[0.6%] rounded-full bg-white/15"
+                style={{ left: `${wall.x}%`, top: `${wall.y}%`, height: `${wall.h}%` }}
+              />
+            ))}
 
           {/* Stepenice — prelaz u drugi deo, klik menja zonu */}
           <button
