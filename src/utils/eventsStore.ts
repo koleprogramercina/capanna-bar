@@ -1,11 +1,30 @@
 import { generateId } from './staffStore';
 
+/** Vrste događaja koje admin bira pri objavi. */
+export const EVENT_TYPES = [
+  { id: 'dj', label: 'DJ veče', emoji: '🎧' },
+  { id: 'bend', label: 'Bend / svirka', emoji: '🎸' },
+  { id: 'zurka', label: 'Žurka', emoji: '🎉' },
+  { id: 'tematsko', label: 'Tematsko veče', emoji: '✨' },
+  { id: 'promocija', label: 'Promocija / akcija', emoji: '🍹' },
+  { id: 'sport', label: 'Sportski prenos', emoji: '⚽' },
+  { id: 'ostalo', label: 'Ostalo', emoji: '📌' },
+] as const;
+
+export type EventTypeId = (typeof EVENT_TYPES)[number]['id'];
+
+export function eventTypeInfo(typeId?: string) {
+  return EVENT_TYPES.find(item => item.id === typeId) || EVENT_TYPES[EVENT_TYPES.length - 1];
+}
+
 /** Događaj koji osoblje objavljuje iz admin panela (žurke, svirke, promocije...). */
 export interface CapannaEvent {
   id: string;
   /** Datum događaja, yyyy-mm-dd. */
   date: string;
   title: string;
+  /** Vrsta događaja — id iz EVENT_TYPES. */
+  type?: EventTypeId;
   desc?: string;
   /** Vreme početka, npr. "21:00" (opciono). */
   time?: string;

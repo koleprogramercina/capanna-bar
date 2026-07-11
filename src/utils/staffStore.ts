@@ -45,7 +45,19 @@ export interface Announcement {
   footer: string;
   imageUrl: string;
   active: boolean;
+  /** Popup je vidljiv tek od ovog trenutka (datetime-local, opciono). */
+  activeFrom?: string;
+  /** Popup se sam gasi posle ovog trenutka (datetime-local, opciono). */
+  activeUntil?: string;
   updatedAt: string;
+}
+
+/** Da li popup treba da se prikazuje sada (aktivan + unutar zakazanog raspona). */
+export function isAnnouncementLive(announcement: Announcement, now = new Date()): boolean {
+  if (!announcement.active) return false;
+  if (announcement.activeFrom && now < new Date(announcement.activeFrom)) return false;
+  if (announcement.activeUntil && now > new Date(announcement.activeUntil)) return false;
+  return true;
 }
 
 const LICENSES_KEY = 'capanna-staff-licenses';

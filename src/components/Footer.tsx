@@ -47,6 +47,8 @@ export default function Footer() {
               {[
                 { to: '/', label: text('Početna', 'Home') },
                 { to: '/meni', label: text('Cenovnik', 'Menu') },
+                { to: '/rezervacija', label: text('Rezervacija', 'Reservation') },
+                { to: '/dogadjaji', label: text('Događaji', 'Events') },
                 { to: '/galerija', label: text('Galerija', 'Gallery') },
                 { to: '/kontakt', label: text('Kontakt', 'Contact') },
               ].map(({ to, label }) => (
@@ -88,6 +90,15 @@ export default function Footer() {
         }`}>
           <div className={`text-xs ${isBeach ? 'text-white/20' : 'text-[#f5e6c8]/20'}`}>
             © {new Date().getFullYear()} Capanna Bar · Sremska Mitrovica · {text('Sva prava zadržana', 'All rights reserved')}
+            {' · '}
+            <a
+              href="https://instagram.com/structura.webs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`transition-colors ${isBeach ? 'hover:text-[#42f5df]' : 'hover:text-[#f0c84d]'}`}
+            >
+              {text('Izrada sajta:', 'Website by')} @structura.webs
+            </a>
           </div>
           <div className={`text-xs flex items-center gap-2 ${isBeach ? 'text-[#00a896]/40' : 'text-[#d4af37]/40'}`}>
             <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${isBeach ? 'bg-[#00a896]' : 'bg-emerald-400'}`} />

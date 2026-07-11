@@ -34,7 +34,8 @@ import {
 import { getActiveSeason, setActiveSeason } from '../utils/staffStore';
 import { isCloudConfigured } from '../utils/cloudSync';
 import { isEmailConfigured } from '../utils/emailService';
-import { addEvent, CapannaEvent, deleteEvent, getEvents } from '../utils/eventsStore';
+import { addEvent, CapannaEvent, deleteEvent, EVENT_TYPES, EventTypeId, eventTypeInfo, getEvents } from '../utils/eventsStore';
+import EmojiPicker from '../components/EmojiPicker';
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -349,7 +350,7 @@ function MenuManager() {
                 <input value={form.price} onChange={event => set({ price: event.currentTarget.value })} required className={inputClass} placeholder="npr. 320 din" />
               </Field>
               <Field label="Emoji">
-                <input value={form.emoji} onChange={event => set({ emoji: event.currentTarget.value })} className={inputClass} placeholder="npr. ☕" />
+                <EmojiPicker value={form.emoji} onChange={emoji => set({ emoji })} />
               </Field>
             </div>
             <Field label="Opis">
@@ -373,12 +374,12 @@ function MenuManager() {
               </select>
             </Field>
             {form.categoryId === '__new__' && (
-              <div className="grid grid-cols-[1fr_90px] gap-3">
+              <div className="grid grid-cols-[1fr_110px] gap-3">
                 <Field label="Naziv nove kategorije">
                   <input value={form.newCatLabel} onChange={event => set({ newCatLabel: event.currentTarget.value })} required className={inputClass} placeholder="npr. Vino" />
                 </Field>
                 <Field label="Emoji">
-                  <input value={form.newCatEmoji} onChange={event => set({ newCatEmoji: event.currentTarget.value })} className={inputClass} placeholder="🍷" />
+                  <EmojiPicker value={form.newCatEmoji} onChange={emoji => set({ newCatEmoji: emoji })} placeholder="🍷" />
                 </Field>
               </div>
             )}
@@ -488,6 +489,7 @@ function StatsSection({ reservations }: { reservations: ReservationRequest[] }) 
 function EventsManager() {
   const [events, setEvents] = useState<CapannaEvent[]>(getEvents);
   const [notice, setNotice] = useState('');
+  const [makePopup, setMakePopup] = useState(false);
 
   useEffect(() => {
     const refresh = (event: Event) => {
@@ -505,16 +507,38 @@ function EventsManager() {
     const date = String(form.get('date') || '');
     const title = String(form.get('title') || '').trim();
     if (!date || !title) return;
-    addEvent({
-      date,
-      title,
-      time: String(form.get('time') || '') || undefined,
-      desc: String(form.get('desc') || '').trim() || undefined,
-    });
+    const type = String(form.get('type') || 'ostalo') as EventTypeId;
+    const time = String(form.get('time') || '') || undefined;
+    const desc = String(form.get('desc') || '').trim() || undefined;
+    addEvent({ date, title, type, time, desc });
+
+    // Opciono: odmah zakaži popup najavu za ovaj događaj
+    const makePopup = form.get('makePopup') === 'on';
+    if (makePopup) {
+      const typeInfo = eventTypeInfo(type);
+      const from = String(form.get('popupFrom') || '') || new Date().toISOString().slice(0, 16);
+      const until = String(form.get('popupUntil') || '') || `${date}T23:59`;
+      const [y, m, d] = date.split('-');
+      saveAnnouncement({
+        ...getAnnouncement(),
+        title: `${typeInfo.emoji} ${title}`,
+        body: `${typeInfo.label} · ${d}.${m}.${y}.${time ? ` od ${time}h` : ''}${desc ? `\n\n${desc}` : ''}`,
+        footer: 'Rezerviši sto na vreme — vidimo se u Capanni! 🍹',
+        active: true,
+        activeFrom: from,
+        activeUntil: until,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
     event.currentTarget.reset();
     setEvents(getEvents());
-    setNotice('Događaj je objavljen — vidljiv je na stranici Događaji i na rezervacijama za taj dan.');
-    window.setTimeout(() => setNotice(''), 4000);
+    setNotice(
+      makePopup
+        ? 'Događaj je objavljen, a popup najava je zakazana — sama će se prikazivati i ugasiti u izabranom periodu.'
+        : 'Događaj je objavljen — vidljiv je na stranici Događaji i na rezervacijama za taj dan.'
+    );
+    window.setTimeout(() => setNotice(''), 5000);
   };
 
   const removeEvent = (id: string) => {
@@ -543,12 +567,35 @@ function EventsManager() {
               <Field label="Datum"><input name="date" required type="date" className={inputClass} /></Field>
               <Field label="Vreme (opciono)"><input name="time" type="time" className={inputClass} /></Field>
             </div>
+            <Field label="Vrsta događaja">
+              <select name="type" required defaultValue="zurka" className={inputClass}>
+                {EVENT_TYPES.map(item => (
+                  <option key={item.id} value={item.id}>{item.emoji} {item.label}</option>
+                ))}
+              </select>
+            </Field>
             <Field label="Naziv događaja">
               <input name="title" required className={inputClass} placeholder="npr. DJ Summer Night" />
             </Field>
             <Field label="Opis (opciono)">
               <textarea name="desc" rows={3} className={inputClass} placeholder="npr. Letnja žurka uz koktele i DJ-a do jutra" />
             </Field>
+
+            <label className="flex items-start gap-3 rounded-xl border border-fuchsia-400/25 bg-fuchsia-500/[0.07] p-3 text-sm text-fuchsia-100/90">
+              <input name="makePopup" type="checkbox" checked={makePopup} onChange={event => setMakePopup(event.currentTarget.checked)} className="mt-0.5" />
+              <span>
+                🪧 <strong>Odmah zakaži i popup najavu</strong> — gosti pri ulasku na sajt vide obaveštenje o događaju, a popup se sam gasi kad prođe.
+              </span>
+            </label>
+            {makePopup && (
+              <div className="space-y-3 rounded-xl border border-white/10 bg-black/25 p-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <Field label="Popup aktivan od"><input name="popupFrom" type="datetime-local" className={inputClass} /></Field>
+                  <Field label="Popup aktivan do"><input name="popupUntil" type="datetime-local" className={inputClass} /></Field>
+                </div>
+                <p className="text-[11px] leading-relaxed text-white/40">Ako ostaviš prazno: aktivan od ovog trenutka do kraja dana događaja (23:59). Napomena: zakazani popup menja postojeći.</p>
+              </div>
+            )}
           </div>
           <button className="mt-4 w-full rounded-xl bg-gradient-to-r from-fuchsia-500 to-purple-500 px-4 py-3 text-sm font-bold uppercase tracking-wider text-white">
             Objavi događaj
@@ -561,8 +608,8 @@ function EventsManager() {
           {upcoming.map(item => (
             <div key={item.id} className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-black/20 p-4">
               <div className="min-w-0">
-                <div className="font-semibold text-white">{item.title}</div>
-                <div className="mt-1 text-xs text-fuchsia-200/80">{item.date}{item.time ? ` · od ${item.time}` : ''}</div>
+                <div className="font-semibold text-white">{eventTypeInfo(item.type).emoji} {item.title}</div>
+                <div className="mt-1 text-xs text-fuchsia-200/80">{eventTypeInfo(item.type).label} · {item.date}{item.time ? ` · od ${item.time}` : ''}</div>
                 {item.desc && <div className="mt-1 text-xs text-white/45">{item.desc}</div>}
               </div>
               <button onClick={() => removeEvent(item.id)} className="flex-shrink-0 rounded-lg bg-red-500/12 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-red-200">
@@ -598,7 +645,13 @@ function ReservationCard({ item }: { item: ReservationRequest }) {
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
           <div className="font-semibold text-white">{item.tableLabel} · {item.name} · {item.guests} osoba</div>
-          <div className="mt-1 text-xs text-white/45">{item.date} u {item.time} · {item.phone}{item.email ? ` · ✉️ ${item.email}` : ''}</div>
+          <div className="mt-1 text-xs text-white/45">
+            {item.date} u {item.time} ·{' '}
+            <a href={`tel:${item.phone.replace(/\s/g, '')}`} className="font-semibold text-[#42f5df] underline decoration-dotted underline-offset-2">
+              📞 {item.phone}
+            </a>
+            {item.email ? ` · ✉️ ${item.email}` : ''}
+          </div>
           <div className="mt-2 text-sm text-white/55">{item.note || 'Bez napomene'}</div>
           <div className="mt-3 inline-flex rounded-full bg-white/10 px-3 py-1 text-xs uppercase tracking-wider">
             {statusLabel[item.status]}
@@ -678,6 +731,8 @@ export default function StaffPortal() {
       footer: String(form.get('footer') || ''),
       imageUrl,
       active: form.get('active') === 'on',
+      activeFrom: String(form.get('activeFrom') || '') || undefined,
+      activeUntil: String(form.get('activeUntil') || '') || undefined,
       updatedAt: new Date().toISOString(),
     });
     setAnnouncement(getAnnouncement());
@@ -827,6 +882,17 @@ export default function StaffPortal() {
                   <input name="active" type="checkbox" defaultChecked={announcement.active} />
                   Popup aktivan
                 </label>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <Field label="Aktivan od (opciono)">
+                    <input name="activeFrom" type="datetime-local" defaultValue={announcement.activeFrom || ''} className={inputClass} />
+                  </Field>
+                  <Field label="Aktivan do (opciono)">
+                    <input name="activeUntil" type="datetime-local" defaultValue={announcement.activeUntil || ''} className={inputClass} />
+                  </Field>
+                </div>
+                <p className="text-[11px] leading-relaxed text-white/40">
+                  Ako uneseš period, popup se sam pojavljuje i gasi u tom rasponu — ne moraš ručno da ga isključuješ. Prazno = radi klasično (dok je štikliran).
+                </p>
               </div>
               <button className="mt-4 w-full rounded-xl bg-[#00a896] px-4 py-3 text-sm font-bold uppercase tracking-wider">Sačuvaj popup</button>
             </form>
@@ -856,6 +922,13 @@ export default function StaffPortal() {
             </form>
           </div>
         </section>
+
+        <div className="pb-4 pt-2 text-center text-xs text-white/25">
+          Capanna admin panel ·{' '}
+          <a href="https://instagram.com/structura.webs" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#42f5df]">
+            Izrada: @structura.webs
+          </a>
+        </div>
       </main>
     </div>
   );

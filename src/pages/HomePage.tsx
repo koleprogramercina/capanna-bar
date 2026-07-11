@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import HeroCanvas from '../components/HeroCanvas';
 import BrandLogo from '../components/BrandLogo';
+import Footer from '../components/Footer';
 import { useSeason } from '../context/SeasonContext';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -219,7 +220,7 @@ export default function HomePage() {
 
           <div className="mt-10 flex items-center justify-center gap-4 pointer-events-auto">
             <Link
-              to="/meni"
+              to={isBeach ? '/meni?tab=kokteli' : '/meni?tab=kafa'}
               className={`px-7 py-3 rounded-full text-sm font-semibold tracking-wider uppercase transition-all duration-300 hover:scale-105 active:scale-95 ${
                 isBeach
                   ? 'bg-gradient-to-r from-[#00a896] to-[#02c8b3] text-white shadow-lg shadow-teal-500/30 hover:shadow-[0_0_34px_rgba(0,214,192,0.5),0_10px_24px_rgba(0,0,0,0.35)]'
@@ -625,34 +626,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className={`border-t py-10 px-6 ${
-        isBeach
-          ? 'bg-[#041410] border-[#00a896]/10'
-          : 'bg-[#0a0705] border-[#d4af37]/10'
-      }`}>
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className={`font-display font-bold text-xl tracking-wider ${isBeach ? 'text-white' : 'text-[#f5e6c8]'}`}>
-            CAPANNA <span className={`font-normal text-sm tracking-widest uppercase ${isBeach ? 'text-[#00a896]' : 'text-[#d4af37]'}`}>Bar</span>
-          </div>
-          <div className={`text-xs tracking-wider text-center ${isBeach ? 'text-white/30' : 'text-[#f5e6c8]/30'}`}>
-            {isBeach ? 'Brioni Beach, Sava River' : 'Kuzminska 1, Sremska Mitrovica'} · © {new Date().getFullYear()} Capanna Bar
-          </div>
-          <div className="flex gap-6">
-            {[text('Početna', 'Home'), text('Meni', 'Menu'), text('Galerija', 'Gallery'), text('Kontakt', 'Contact')].map((item, i) => (
-              <Link
-                key={item}
-                to={['/', '/meni', '/galerija', '/kontakt'][i]}
-                className={`text-xs tracking-widest uppercase transition-colors duration-300 ${
-                  isBeach ? 'text-white/30 hover:text-[#00a896]' : 'text-[#f5e6c8]/30 hover:text-[#d4af37]'
-                }`}
-              >
-                {item}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

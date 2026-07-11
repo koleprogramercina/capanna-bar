@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAnnouncement } from '../utils/staffStore';
+import { getAnnouncement, isAnnouncementLive } from '../utils/staffStore';
 
 const SEEN_KEY = 'capanna-announcement-seen-at';
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -12,12 +12,13 @@ export default function AnnouncementPopup() {
   useEffect(() => {
     const seenAt = Number(localStorage.getItem(SEEN_KEY) || 0);
     const hasContent = announcement.title.trim() || announcement.body.trim() || announcement.imageUrl.trim();
-    if (announcement.active && hasContent && Date.now() - seenAt > DAY_MS) {
+    if (isAnnouncementLive(announcement) && hasContent && Date.now() - seenAt > DAY_MS) {
       const timer = setTimeout(() => setOpen(true), 1200);
       return () => clearTimeout(timer);
     }
     return undefined;
-  }, [announcement.active, announcement.body, announcement.imageUrl, announcement.title, version]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [announcement.active, announcement.activeFrom, announcement.activeUntil, announcement.body, announcement.imageUrl, announcement.title, version]);
 
   useEffect(() => {
     const refresh = () => setVersion(item => item + 1);
@@ -30,7 +31,7 @@ export default function AnnouncementPopup() {
     setOpen(false);
   };
 
-  if (!open || !announcement.active || (!announcement.title.trim() && !announcement.body.trim() && !announcement.imageUrl.trim())) return null;
+  if (!open || !isAnnouncementLive(announcement) || (!announcement.title.trim() && !announcement.body.trim() && !announcement.imageUrl.trim())) return null;
 
   return (
     <div className="fixed inset-0 z-[140] flex items-center justify-center bg-black/70 px-4 backdrop-blur-md">

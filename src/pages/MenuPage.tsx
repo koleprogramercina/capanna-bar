@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useSeason } from '../context/SeasonContext';
 import { useLanguage } from '../context/LanguageContext';
 import { QRCodeSVG as QRCode } from 'qrcode.react';
@@ -188,6 +189,14 @@ export default function MenuPage() {
       setActiveTab(currentMenu[0].id);
     }
   }, [currentMenu, activeTab]);
+
+  // ?tab=kokteli iz linka (npr. dugme "Vidi koktele") otvara tu kategoriju.
+  // Mora POSLE inicijalizacije taba da je pri mount-u ne bi pregazila.
+  const location = useLocation();
+  useEffect(() => {
+    const tab = new URLSearchParams(location.search).get('tab');
+    if (tab && currentMenu.some(category => category.id === tab)) setActiveTab(tab);
+  }, [location.search, currentMenu]);
 
   const activeCategory = currentMenu.find(c => c.id === activeTab) || currentMenu[0];
 

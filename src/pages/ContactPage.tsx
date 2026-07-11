@@ -1,6 +1,7 @@
 import { useSeason } from '../context/SeasonContext';
 import { useLanguage } from '../context/LanguageContext';
 import BeachReservationMap from '../components/BeachReservationMap';
+import Footer from '../components/Footer';
 
 const currentMonth = new Date().getMonth();
 const isCurrentlySummer = currentMonth >= 4 && currentMonth <= 8;
@@ -341,6 +342,7 @@ export default function ContactPage() {
           </section>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

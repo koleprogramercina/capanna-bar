@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { createReservation, getReservations, ReservationRequest } from '../utils/staffStore';
 import { isEmailConfigured } from '../utils/emailService';
-import { getEventsForDate } from '../utils/eventsStore';
+import { eventTypeInfo, getEventsForDate } from '../utils/eventsStore';
 import { beachTables, donjiDividers, isPartyNight, PARTY_CUTOFF, TableSpot, TableZone, zoneLabels } from '../data/tables';
 
 const MIN_LEAD_MINUTES = 90;
@@ -339,7 +339,7 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
             {dateEvents.length > 0 && (
               <div className="rounded-xl border border-fuchsia-400/25 bg-fuchsia-500/[0.09] p-3 text-sm leading-relaxed text-fuchsia-100">
                 🎉 <strong>Tog dana u Capanni:</strong>{' '}
-                {dateEvents.map(item => `${item.title}${item.time ? ` (od ${item.time})` : ''}`).join(' · ')}
+                {dateEvents.map(item => `${eventTypeInfo(item.type).emoji} ${item.title}${item.time ? ` (od ${item.time})` : ''}`).join(' · ')}
                 {isPartyNight(chosenDate) && <span className="mt-1 block text-xs text-fuchsia-200/75">Rezervacija tog dana važi najkasnije do {PARTY_CUTOFF}.</span>}
               </div>
             )}

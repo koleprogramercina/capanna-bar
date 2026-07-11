@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSeason } from '../context/SeasonContext';
+import Footer from '../components/Footer';
 import { useLanguage } from '../context/LanguageContext';
 
 interface GalleryItem {
@@ -262,6 +263,7 @@ export default function GalleryPage() {
           50% { transform: scaleY(1.3) translateY(-5px); }
         }
       `}</style>
+      <Footer />
     </div>
   );
 }

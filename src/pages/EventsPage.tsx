@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { CalendarDays, ChevronLeft, ChevronRight, Clock, PartyPopper } from 'lucide-react';
 import { useSeason } from '../context/SeasonContext';
 import { useLanguage } from '../context/LanguageContext';
-import { CapannaEvent, getEvents, getUpcomingEvents } from '../utils/eventsStore';
+import { CapannaEvent, eventTypeInfo, getEvents, getUpcomingEvents } from '../utils/eventsStore';
 import Footer from '../components/Footer';
 
 const MONTHS_SR = ['Januar', 'Februar', 'Mart', 'April', 'Maj', 'Jun', 'Jul', 'Avgust', 'Septembar', 'Oktobar', 'Novembar', 'Decembar'];
@@ -180,6 +180,9 @@ export default function EventsPage() {
                       <div className="flex items-start gap-3">
                         <PartyPopper size={20} className={accentText} />
                         <div className="min-w-0">
+                          <div className={`mb-1 inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${isBeach ? 'bg-[#00a896]/20 text-[#42f5df]' : 'bg-[#d4af37]/20 text-[#f0c84d]'}`}>
+                            {eventTypeInfo(event.type).emoji} {eventTypeInfo(event.type).label}
+                          </div>
                           <div className={`font-display text-lg font-bold ${isBeach ? 'text-white' : 'text-[#f5e6c8]'}`}>{event.title}</div>
                           {event.time && (
                             <div className={`mt-1 flex items-center gap-1.5 text-xs ${accentText}`}>
@@ -233,8 +236,10 @@ export default function EventsPage() {
                         </div>
                       </div>
                       <div className="min-w-0">
-                        <div className={`truncate text-sm font-semibold ${isBeach ? 'text-white' : 'text-[#f5e6c8]'}`}>{event.title}</div>
-                        <div className={`text-xs ${isBeach ? 'text-white/40' : 'text-[#f5e6c8]/40'}`}>{event.time ? `${text('od', 'from')} ${event.time}` : text('ceo dan', 'all day')}</div>
+                        <div className={`truncate text-sm font-semibold ${isBeach ? 'text-white' : 'text-[#f5e6c8]'}`}>{eventTypeInfo(event.type).emoji} {event.title}</div>
+                        <div className={`text-xs ${isBeach ? 'text-white/40' : 'text-[#f5e6c8]/40'}`}>
+                          {eventTypeInfo(event.type).label} · {event.time ? `${text('od', 'from')} ${event.time}` : text('ceo dan', 'all day')}
+                        </div>
                       </div>
                     </button>
                   ))}
