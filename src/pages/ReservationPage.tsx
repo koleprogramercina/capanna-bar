@@ -20,8 +20,8 @@ export default function ReservationPage() {
           </h1>
           <p className={`mt-5 max-w-2xl text-sm leading-relaxed ${isBeach ? 'text-white/60' : 'text-[#f5e6c8]/60'}`}>
             {text(
-              'Za sada rezervacije potvrđujemo preko Instagram profila @capannabar. Ovde možeš da izabereš sto, vreme, datum i broj osoba, a upit stiže u staff panel kao test.',
-              'For now reservations are confirmed through Instagram @capannabar. Here you can choose a table, time, date and number of guests, and the request appears in the staff panel as a test.'
+              'Izaberi sto, datum, vreme i broj osoba — rezervacija odmah stiže našem osoblju, a mi te pozivamo telefonom da potvrdimo. Rezervacije primamo i porukom na Instagram profilu @capannabar.',
+              'Pick a table, date, time and number of guests — your reservation goes straight to our staff and we will call you to confirm. We also take reservations via Instagram DM at @capannabar.'
             )}
           </p>
           <a

@@ -13,6 +13,7 @@ import MenuPage from './pages/MenuPage';
 import GalleryPage from './pages/GalleryPage';
 import ContactPage from './pages/ContactPage';
 import ReservationPage from './pages/ReservationPage';
+import EventsPage from './pages/EventsPage';
 
 function ScrollToTop() {
 const { pathname } = useLocation();
@@ -104,6 +105,7 @@ return (
 <Route path="/" element={<HomePage />} />
 <Route path="/meni" element={<MenuPage />} />
 <Route path="/rezervacija" element={<ReservationPage />} />
+<Route path="/dogadjaji" element={<EventsPage />} />
 <Route path="/galerija" element={<GalleryPage />} />
 <Route path="/kontakt" element={<ContactPage />} />
 <Route path="*" element={<HomePage />} />

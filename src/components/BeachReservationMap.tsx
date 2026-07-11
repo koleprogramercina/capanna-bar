@@ -1,9 +1,12 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { createReservation, getReservations, ReservationRequest } from '../utils/staffStore';
 import { isEmailConfigured } from '../utils/emailService';
+import { getEventsForDate } from '../utils/eventsStore';
 import { beachTables, donjiDividers, isPartyNight, PARTY_CUTOFF, TableSpot, TableZone, zoneLabels } from '../data/tables';
 
 const MIN_LEAD_MINUTES = 90;
+/** Minimalan razmak između dve rezervacije istog stola istog dana. */
+const TABLE_GAP_MINUTES = 120;
 
 function todayIso() {
   const now = new Date();
@@ -56,12 +59,24 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
   const [sent, setSent] = useState(false);
   const [sentWithEmail, setSentWithEmail] = useState(false);
   const [formError, setFormError] = useState('');
+  const [chosenDate, setChosenDate] = useState('');
+  const [eventsVersion, setEventsVersion] = useState(0);
 
   useEffect(() => {
-    const refresh = () => setReservations(getReservations());
+    const refresh = (event: Event) => {
+      const detail = (event as CustomEvent).detail;
+      if (!detail || detail === 'capanna-reservations') setReservations(getReservations());
+      if (!detail || detail === 'capanna-events') setEventsVersion(v => v + 1);
+    };
     window.addEventListener('capanna-data-updated', refresh);
     return () => window.removeEventListener('capanna-data-updated', refresh);
   }, []);
+
+  // Događaj objavljen za izabrani datum (prikazuje se gostu na formi)
+  const dateEvents = useMemo(
+    () => (chosenDate ? getEventsForDate(chosenDate) : []),
+    [chosenDate, eventsVersion]
+  );
 
   const zoneTables = useMemo(() => beachTables.filter(t => t.zone === zone), [zone]);
   const selectedStatus = useMemo(() => statusFor(selectedTable.id, reservations), [reservations, selectedTable.id]);
@@ -123,6 +138,18 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
       setFormError(`Petkom i subotom su žurke — rezervacije važe najkasnije do ${PARTY_CUTOFF}. Izaberi raniji termin.`);
       return;
     }
+    // Isti sto ne može dva puta u kratkom razmaku — minimum 2 sata između rezervacija
+    const conflict = reservations.find(item => {
+      if (item.tableId !== selectedTable.id || item.date !== date || item.status === 'declined') return false;
+      const existing = new Date(`${item.date}T${item.time}`);
+      return Math.abs(requested.getTime() - existing.getTime()) < TABLE_GAP_MINUTES * 60_000;
+    });
+    if (conflict) {
+      setFormError(
+        `Sto ${selectedTable.id} je već tražen tog dana u ${conflict.time}. Između dve rezervacije istog stola mora proći najmanje 2 sata — izaberi drugi termin ili drugi sto.`
+      );
+      return;
+    }
 
     setFormError('');
     createReservation({
@@ -137,6 +164,7 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
       note: String(form.get('note') || ''),
     });
     event.currentTarget.reset();
+    setChosenDate('');
     setSent(true);
     setSentWithEmail(Boolean(email) && isEmailConfigured());
     setReservations(getReservations());
@@ -265,7 +293,7 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
               <p className="mt-2 text-xs leading-relaxed text-fuchsia-200/80">🎉 Barski sto — rezerviše se samo za žurke (petak i subota), važi do {PARTY_CUTOFF}.</p>
             )}
             {!staffView && selectedTable.reservable && (
-              <p className="mt-2 text-xs leading-relaxed text-white/40">Pošalji upit za sto. Osoblje potvrđuje rezervaciju iz admin panela.</p>
+              <p className="mt-2 text-xs leading-relaxed text-white/40">Izaberi termin i pošalji rezervaciju — osoblje Capanne te poziva telefonom da potvrdi.</p>
             )}
           </div>
           <div className="rounded-full bg-[#00a896]/15 px-3 py-1 text-xs font-semibold text-[#42f5df]">Brioni</div>
@@ -297,9 +325,24 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
             </div>
             <input name="email" type="email" placeholder="Email (opciono — za potvrdu rezervacije)" className="w-full rounded-xl border border-[#00a896]/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none placeholder:text-white/30" />
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <input name="date" required type="date" min={todayIso()} className="rounded-xl border border-[#00a896]/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none" />
+              <input
+                name="date"
+                required
+                type="date"
+                min={todayIso()}
+                value={chosenDate}
+                onChange={event => setChosenDate(event.currentTarget.value)}
+                className="rounded-xl border border-[#00a896]/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none"
+              />
               <input name="time" required type="time" className="rounded-xl border border-[#00a896]/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none" />
             </div>
+            {dateEvents.length > 0 && (
+              <div className="rounded-xl border border-fuchsia-400/25 bg-fuchsia-500/[0.09] p-3 text-sm leading-relaxed text-fuchsia-100">
+                🎉 <strong>Tog dana u Capanni:</strong>{' '}
+                {dateEvents.map(item => `${item.title}${item.time ? ` (od ${item.time})` : ''}`).join(' · ')}
+                {isPartyNight(chosenDate) && <span className="mt-1 block text-xs text-fuchsia-200/75">Rezervacija tog dana važi najkasnije do {PARTY_CUTOFF}.</span>}
+              </div>
+            )}
             <p className="text-[11px] leading-relaxed text-white/35">
               Najmanje 1 sat i 30 min unapred. Petkom i subotom (žurka) rezervacije važe do {PARTY_CUTOFF}.
             </p>
@@ -314,14 +357,14 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
             />
             <textarea name="note" placeholder="Napomena" rows={3} className="w-full rounded-xl border border-[#00a896]/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none placeholder:text-white/30" />
             <button className="w-full rounded-xl bg-gradient-to-r from-[#00a896] to-[#02c8b3] px-5 py-3 text-sm font-bold uppercase tracking-wider text-white">
-              Pošalji upit za rezervaciju
+              Rezerviši sto
             </button>
             {formError && <div className="rounded-xl bg-red-500/10 p-3 text-center text-sm text-red-300">{formError}</div>}
             {sent && (
               <div className="rounded-xl bg-emerald-500/10 p-3 text-center text-sm text-emerald-300">
                 {sentWithEmail
-                  ? 'Upit je prosleđen osoblju. Potvrda ti stiže na email — i još jedna kada rezervacija bude odobrena.'
-                  : 'Upit je prosleđen osoblju. Osoblje potvrđuje rezervaciju u najkraćem roku.'}
+                  ? 'Rezervacija je primljena! Potvrda ti stiže na email — i još jedna kada bude odobrena.'
+                  : '📞 Rezervacija je primljena! Osoblje Capanne će te uskoro pozvati telefonom da potvrdi.'}
               </div>
             )}
           </form>

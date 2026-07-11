@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Home, Coffee, Calendar, Image, Phone } from 'lucide-react';
+import { Home, Coffee, Calendar, Image, Phone, PartyPopper } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 interface Props {
@@ -12,6 +12,7 @@ export default function ShakerMenuMobile({ onClose }: Props) {
   const menuItems = [
     { to: '/meni', label: text('CENOVNIK', 'MENU'), icon: <Coffee size={22} />, end: false },
     { to: '/rezervacija', label: text('REZERVACIJA', 'RESERVATION'), icon: <Calendar size={22} />, end: false },
+    { to: '/dogadjaji', label: text('DOGAĐAJI', 'EVENTS'), icon: <PartyPopper size={22} />, end: false },
     { to: '/galerija', label: text('GALERIJA', 'GALLERY'), icon: <Image size={22} />, end: false },
     { to: '/kontakt', label: text('KONTAKT', 'CONTACT'), icon: <Phone size={22} />, end: false },
   ];

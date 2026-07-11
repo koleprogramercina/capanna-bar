@@ -17,6 +17,7 @@ const SYNC_KEYS = [
   'capanna-announcement',
   'capanna-active-season',
   'capanna-tables',
+  'capanna-events',
 ];
 
 const POLL_INTERVAL_MS = 45_000;

@@ -34,6 +34,7 @@ import {
 import { getActiveSeason, setActiveSeason } from '../utils/staffStore';
 import { isCloudConfigured } from '../utils/cloudSync';
 import { isEmailConfigured } from '../utils/emailService';
+import { addEvent, CapannaEvent, deleteEvent, getEvents } from '../utils/eventsStore';
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -484,6 +485,113 @@ function StatsSection({ reservations }: { reservations: ReservationRequest[] }) 
   );
 }
 
+function EventsManager() {
+  const [events, setEvents] = useState<CapannaEvent[]>(getEvents);
+  const [notice, setNotice] = useState('');
+
+  useEffect(() => {
+    const refresh = (event: Event) => {
+      const detail = (event as CustomEvent).detail;
+      if (detail && detail !== 'capanna-events') return;
+      setEvents(getEvents());
+    };
+    window.addEventListener('capanna-data-updated', refresh);
+    return () => window.removeEventListener('capanna-data-updated', refresh);
+  }, []);
+
+  const submitEvent = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const date = String(form.get('date') || '');
+    const title = String(form.get('title') || '').trim();
+    if (!date || !title) return;
+    addEvent({
+      date,
+      title,
+      time: String(form.get('time') || '') || undefined,
+      desc: String(form.get('desc') || '').trim() || undefined,
+    });
+    event.currentTarget.reset();
+    setEvents(getEvents());
+    setNotice('Događaj je objavljen — vidljiv je na stranici Događaji i na rezervacijama za taj dan.');
+    window.setTimeout(() => setNotice(''), 4000);
+  };
+
+  const removeEvent = (id: string) => {
+    deleteEvent(id);
+    setEvents(getEvents());
+  };
+
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const upcoming = events.filter(item => item.date >= todayIso);
+  const past = events.filter(item => item.date < todayIso);
+
+  return (
+    <section className="rounded-2xl border border-fuchsia-400/20 bg-fuchsia-500/[0.04] p-5">
+      <h2 className="text-xl font-display font-bold">🎉 Događaji</h2>
+      <p className="mt-1 text-sm text-white/45">
+        Objavi žurku, svirku ili specijalnu večer — gosti je vide u kalendaru na stranici „Događaji", a prikazuje se i na rezervacijama za taj dan.
+      </p>
+
+      {notice && <div className="mt-4 rounded-xl bg-emerald-500/12 p-3 text-sm text-emerald-200">{notice}</div>}
+
+      <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+        <form onSubmit={submitEvent} className="h-fit rounded-xl border border-white/10 bg-black/20 p-4">
+          <h3 className="font-display text-lg font-bold">Novi događaj</h3>
+          <div className="mt-4 space-y-3">
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Datum"><input name="date" required type="date" className={inputClass} /></Field>
+              <Field label="Vreme (opciono)"><input name="time" type="time" className={inputClass} /></Field>
+            </div>
+            <Field label="Naziv događaja">
+              <input name="title" required className={inputClass} placeholder="npr. DJ Summer Night" />
+            </Field>
+            <Field label="Opis (opciono)">
+              <textarea name="desc" rows={3} className={inputClass} placeholder="npr. Letnja žurka uz koktele i DJ-a do jutra" />
+            </Field>
+          </div>
+          <button className="mt-4 w-full rounded-xl bg-gradient-to-r from-fuchsia-500 to-purple-500 px-4 py-3 text-sm font-bold uppercase tracking-wider text-white">
+            Objavi događaj
+          </button>
+        </form>
+
+        <div className="space-y-3">
+          <div className="text-xs font-bold uppercase tracking-[0.2em] text-white/35">Predstojeći ({upcoming.length})</div>
+          {upcoming.length === 0 && <div className="rounded-xl bg-white/[0.03] p-4 text-sm text-white/45">Nema objavljenih događaja.</div>}
+          {upcoming.map(item => (
+            <div key={item.id} className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-black/20 p-4">
+              <div className="min-w-0">
+                <div className="font-semibold text-white">{item.title}</div>
+                <div className="mt-1 text-xs text-fuchsia-200/80">{item.date}{item.time ? ` · od ${item.time}` : ''}</div>
+                {item.desc && <div className="mt-1 text-xs text-white/45">{item.desc}</div>}
+              </div>
+              <button onClick={() => removeEvent(item.id)} className="flex-shrink-0 rounded-lg bg-red-500/12 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-red-200">
+                Obriši
+              </button>
+            </div>
+          ))}
+          {past.length > 0 && (
+            <>
+              <div className="pt-2 text-xs font-bold uppercase tracking-[0.2em] text-white/25">Prošli ({past.length})</div>
+              {past.slice(-4).map(item => (
+                <div key={item.id} className="flex items-start justify-between gap-3 rounded-xl border border-white/5 bg-black/10 p-3 opacity-55">
+                  <div className="min-w-0 text-sm">
+                    <span className="font-semibold text-white/70">{item.title}</span>
+                    <span className="ml-2 text-xs text-white/40">{item.date}</span>
+                  </div>
+                  <button onClick={() => removeEvent(item.id)} className="flex-shrink-0 rounded-lg bg-red-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-red-200/70">
+                    Obriši
+                  </button>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ReservationCard({ item }: { item: ReservationRequest }) {
   return (
     <div className="rounded-xl border border-white/10 bg-black/20 p-4">
@@ -657,6 +765,8 @@ export default function StaffPortal() {
         </section>
 
         <StatsSection reservations={reservations} />
+
+        <EventsManager />
 
         {staff.role === 'owner' ? (
           <MenuManager />

@@ -32,12 +32,14 @@ export default function Navbar() {
   }, [menuOpen]);
 
   return (
+    /* backdrop-blur samo od md: — na mobilnim browserima veliki blur na fixed
+       elementu pravi glitch pri skrolu (bar se ne renderuje ceo) */
     <nav
-      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
+      className={`fixed left-0 right-0 top-0 z-50 transition-[background-color,border-color,box-shadow] duration-500 ${
         scrolled
           ? isBeach
-            ? 'border-b border-white/[0.06] bg-[#04120f]/55 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-2xl backdrop-saturate-150'
-            : 'border-b border-white/[0.06] bg-[#0d0804]/55 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-2xl backdrop-saturate-150'
+            ? 'border-b border-white/[0.06] bg-[#04120f]/95 shadow-[0_8px_32px_rgba(0,0,0,0.35)] md:bg-[#04120f]/55 md:backdrop-blur-2xl md:backdrop-saturate-150'
+            : 'border-b border-white/[0.06] bg-[#0d0804]/95 shadow-[0_8px_32px_rgba(0,0,0,0.35)] md:bg-[#0d0804]/55 md:backdrop-blur-2xl md:backdrop-saturate-150'
           : 'border-b border-transparent bg-transparent'
       }`}
     >
