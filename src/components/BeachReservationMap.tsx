@@ -173,21 +173,23 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
   return (
     <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1.25fr_0.75fr]">
       <div>
-        {/* Birač dela lokala */}
-        <div className="mb-4 flex rounded-2xl border border-[#00a896]/15 bg-[#071a17] p-1.5">
+        {/* Birač dela lokala — tačno 50/50, sadržaj ne sme da ispada iz diva */}
+        <div className="mb-4 grid grid-cols-2 gap-1.5 overflow-hidden rounded-2xl border border-[#00a896]/15 bg-[#071a17] p-1.5">
           {(['gornji', 'donji'] as const).map(item => {
             const count = beachTables.filter(t => t.zone === item && t.reservable).length;
             return (
               <button
                 key={item}
                 onClick={() => switchZone(item)}
-                className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all ${
+                className={`flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-2 py-2.5 text-xs font-bold uppercase tracking-wider transition-all sm:flex-row sm:gap-2 sm:px-4 sm:py-3 sm:text-sm ${
                   zone === item ? 'bg-gradient-to-r from-[#00a896] to-[#02c8b3] text-white shadow-lg shadow-teal-900/40' : 'text-white/45 hover:text-white/75'
                 }`}
               >
-                <span>{item === 'gornji' ? '⬆' : '⬇'}</span>
-                <span>{zoneLabels[item].sr}</span>
-                <span className={`rounded-full px-2 py-0.5 text-[10px] ${zone === item ? 'bg-white/20' : 'bg-white/10'}`}>{count} stolova</span>
+                <span className="flex min-w-0 items-center gap-1.5">
+                  <span>{item === 'gornji' ? '⬆' : '⬇'}</span>
+                  <span className="truncate">{zoneLabels[item].sr}</span>
+                </span>
+                <span className={`whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] ${zone === item ? 'bg-white/20' : 'bg-white/10'}`}>{count} stolova</span>
               </button>
             );
           })}

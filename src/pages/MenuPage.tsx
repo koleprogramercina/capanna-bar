@@ -200,16 +200,24 @@ export default function MenuPage() {
 
   const activeCategory = currentMenu.find(c => c.id === activeTab) || currentMenu[0];
 
-  // Slide indicator
+  // Slide indicator — prati aktivan tab i po X i po Y osi, pa radi i za
+  // horizontalne tabove (desktop) i za vertikalnu listu (telefon)
   useEffect(() => {
-    if (!tabsRef.current || !indicatorRef.current) return;
-    const activeBtn = tabsRef.current.querySelector(`[data-tab="${activeTab}"]`) as HTMLElement;
-    if (!activeBtn) return;
-    const containerRect = tabsRef.current.getBoundingClientRect();
-    const btnRect = activeBtn.getBoundingClientRect();
-    indicatorRef.current.style.left = `${btnRect.left - containerRect.left}px`;
-    indicatorRef.current.style.width = `${btnRect.width}px`;
-  }, [activeTab, isBeach]);
+    const position = () => {
+      if (!tabsRef.current || !indicatorRef.current) return;
+      const activeBtn = tabsRef.current.querySelector(`[data-tab="${activeTab}"]`) as HTMLElement;
+      if (!activeBtn) return;
+      const containerRect = tabsRef.current.getBoundingClientRect();
+      const btnRect = activeBtn.getBoundingClientRect();
+      indicatorRef.current.style.left = `${btnRect.left - containerRect.left}px`;
+      indicatorRef.current.style.top = `${btnRect.top - containerRect.top}px`;
+      indicatorRef.current.style.width = `${btnRect.width}px`;
+      indicatorRef.current.style.height = `${btnRect.height}px`;
+    };
+    position();
+    window.addEventListener('resize', position);
+    return () => window.removeEventListener('resize', position);
+  }, [activeTab, isBeach, menus]);
 
   const qrMenuUrl = PUBLIC_MENU_URL;
   const categoryLabel = (cat: MenuCategory) => isEnglish ? cat.labelEn || categoryTranslations[cat.id] || cat.label : cat.label;
@@ -323,37 +331,37 @@ export default function MenuPage() {
 
       {/* Main content */}
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-10">
-        {/* Filter tabs */}
+        {/* Filter tabs — na telefonu vertikalna lista (jedno ispod drugog), na širem ekranu horizontalni tabovi */}
         <div
           ref={tabsRef}
-          className={`relative flex flex-wrap gap-2 p-1.5 rounded-2xl mb-10 ${
+          className={`relative flex flex-col gap-2 p-1.5 rounded-2xl mb-10 sm:flex-row sm:flex-wrap ${
             isBeach ? 'bg-[#0a2820] border border-[#00a896]/10' : 'bg-[#1a110b] border border-[#d4af37]/10'
           }`}
         >
-          {/* Sliding indicator */}
+          {/* Sliding indicator — dobija i top/height iz JS-a pa označava samo aktivno dugme u oba rasporeda */}
           <div
             ref={indicatorRef}
-            className={`absolute top-1.5 h-[calc(100%-12px)] rounded-xl transition-all duration-400 pointer-events-none ${
+            className={`absolute rounded-xl transition-all duration-400 pointer-events-none ${
               isBeach
                 ? 'bg-gradient-to-r from-[#00a896] to-[#02c8b3] shadow-lg shadow-teal-500/20'
                 : 'bg-gradient-to-r from-[#d4af37] to-[#a07f20] shadow-lg shadow-amber-500/20'
             }`}
-            style={{ left: 0, width: 0 }}
+            style={{ left: 0, top: 0, width: 0, height: 0 }}
           />
           {currentMenu.map(cat => (
             <button
               key={cat.id}
               data-tab={cat.id}
               onClick={() => setActiveTab(cat.id)}
-              className={`relative z-10 flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold tracking-wide transition-all duration-300 ${
+              className={`relative z-10 flex w-full items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold tracking-wide transition-all duration-300 sm:w-auto ${
                 activeTab === cat.id
                   ? isBeach ? 'text-white' : 'text-[#1a110b]'
                   : isBeach ? 'text-white/72 hover:text-white bg-white/[0.03]' : 'text-[#f5e6c8]/72 hover:text-[#f5e6c8] bg-white/[0.03]'
               }`}
             >
               <span>{cat.emoji}</span>
-              <span>{categoryLabel(cat)}</span>
-              <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+              <span className="min-w-0 truncate">{categoryLabel(cat)}</span>
+              <span className={`ml-auto text-xs px-1.5 py-0.5 rounded-full sm:ml-0 ${
                 activeTab === cat.id
                   ? isBeach ? 'bg-white/20 text-white' : 'bg-[#1a110b]/20 text-[#1a110b]'
                   : isBeach ? 'bg-white/12 text-white/70' : 'bg-white/8 text-[#f5e6c8]/70'

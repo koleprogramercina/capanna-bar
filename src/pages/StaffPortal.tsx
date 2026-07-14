@@ -15,6 +15,7 @@ import {
   registerStaff,
   ReservationRequest,
   saveAnnouncement,
+  saveReservations,
   StaffAccount,
   StaffRole,
   updateReservationNotification,
@@ -752,6 +753,38 @@ export default function StaffPortal() {
     declined: reservations.filter(item => item.status === 'declined'),
   };
 
+  // Arhiviraj sve rezervacije u CSV (Excel), pa ih uz potvrdu obriši iz baze
+  const archiveAndClearReservations = () => {
+    const all = getReservations();
+    if (all.length === 0) {
+      window.alert('Nema rezervacija za arhiviranje.');
+      return;
+    }
+    const header = ['Datum', 'Vreme', 'Sto', 'Ime i prezime', 'Telefon', 'Email', 'Osobe', 'Napomena', 'Status', 'Primljeno'];
+    const rows = all.map(item => [
+      item.date, item.time, item.tableLabel, item.name, item.phone, item.email || '',
+      String(item.guests), item.note || '', statusLabel[item.status], item.createdAt.slice(0, 16).replace('T', ' '),
+    ]);
+    // BOM + tačka-zarez da Excel lepo otvori naša slova i kolone
+    const csv = '﻿' + [header, ...rows]
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(';'))
+      .join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `capanna-rezervacije-arhiva-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+
+    window.setTimeout(() => {
+      if (window.confirm(`CSV arhiva (${all.length} rezervacija) je preuzeta.\n\nObrisati sada sve rezervacije iz baze? Ovo ne može da se poništi.`)) {
+        saveReservations([]);
+        setReservations([]);
+      }
+    }, 400);
+  };
+
   return (
     <div className="min-h-screen bg-[#050807] text-white">
       <header className="border-b border-white/10 bg-black/25 px-5 py-4 backdrop-blur-xl">
@@ -837,6 +870,23 @@ export default function StaffPortal() {
             <p className="mt-1 text-sm text-white/45">Klikni sto da vidiš rezervacije za njega. Boje označavaju status.</p>
           </div>
           <BeachReservationMap staffView />
+        </section>
+
+        <section className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-xl font-display font-bold">Rezervacije</h2>
+            <p className="mt-1 text-sm text-white/45">
+              {reservations.length} {reservations.length === 1 ? 'rezervacija' : 'rezervacija'} u bazi. Arhiviranje prvo preuzima CSV fajl (otvara se u Excelu), pa briše sve iz baze.
+            </p>
+          </div>
+          {staff.role === 'owner' && (
+            <button
+              onClick={archiveAndClearReservations}
+              className="flex-shrink-0 rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-xs font-bold uppercase tracking-wider text-amber-200 transition-colors hover:bg-amber-400/20"
+            >
+              📦 Arhiviraj (CSV) i obriši sve
+            </button>
+          )}
         </section>
 
         <section className="grid grid-cols-1 gap-5 xl:grid-cols-[1.1fr_0.9fr]">
