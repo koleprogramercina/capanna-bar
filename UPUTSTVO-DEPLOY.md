@@ -2,23 +2,27 @@
 
 ## Šta se upload-uje na hosting
 
-**Kompletan sajt = sadržaj foldera `docs/`.** Sve iz njega ide u glavni folder hostinga
-(na cPanel-u je to `public_html`). Host servira `index.html` kada neko otvori domen.
-**Ne zipuj ništa** — prebaci fajlove i folder `images/` u istoj strukturi, takve kakvi jesu.
+**Sve iz foldera `ZA-HOSTING/`** — to je jedini folder koji te zanima. U njemu je
+samo ono što ide na server, ništa više:
 
-| Fajl / folder | Šta je | Obavezno? |
-|---|---|---|
-| `index.html` | Glavni sajt (sve u jednom fajlu) | ✅ |
-| `images/` (ceo folder) | Fotografije, logo, PWA ikonice | ✅ |
-| `ops-7429x.html` | Admin panel za osoblje (ne deliti link javno) | ✅ |
-| `manifest.webmanifest`, `sw.js` | PWA — instalacija na telefon, offline meni | ✅ |
-| `robots.txt`, `sitemap.xml` | SEO (već pokazuju na capannabar.rs) | ✅ |
-| `.nojekyll` | Treba samo GitHub Pages-u | ⬜ svejedno |
+```
+ZA-HOSTING/
+├── index.html            ← glavni sajt (host ga čita kad neko otvori domen)
+├── ops-7429x.html        ← admin panel (biće na capannabar.rs/ops-7429x.html)
+├── images/               ← sve fotografije i ikonice
+├── manifest.webmanifest  ← PWA (instalacija na telefon)
+├── sw.js                 ← PWA (offline meni)
+├── robots.txt            ← SEO
+└── sitemap.xml           ← SEO
+```
+
+Kako: otvori `ZA-HOSTING`, selektuj **sav sadržaj** (ne sam folder!) i prebaci ga u
+glavni folder hostinga — na cPanel-u je to `public_html`. `index.html` mora završiti
+direktno u `public_html`, ne u podfolderu.
 
 Napomene:
-- `index.html` mora biti direktno u root-u domena (ne u podfolderu).
+- **Ne zipuj ništa** — fajlovi i `images/` idu takvi kakvi jesu, u istoj strukturi.
 - Nije potreban Node/PHP — čist statički sajt, radi na svakom hostingu.
-- Admin panel će biti na `capannabar.rs/ops-7429x.html`.
 
 ## Posle svake izmene sajta
 
@@ -26,8 +30,8 @@ Napomene:
 npm run pages
 ```
 
-pa ponovo upload-uj `index.html` i `ops-7429x.html` iz `docs/` (i `images/` ako su
-menjane slike).
+— to automatski osveži `ZA-HOSTING/` folder. Zatim ponovo prebaci `index.html` i
+`ops-7429x.html` na hosting (i `images/` samo ako su menjane slike).
 
 ## Konfiguracija — POPUNJENO ✅
 

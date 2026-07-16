@@ -1,5 +1,6 @@
 node_modules/
 dist/
+ZA-HOSTING/
 .claude/gh-config/
 *.log
 .DS_Store
