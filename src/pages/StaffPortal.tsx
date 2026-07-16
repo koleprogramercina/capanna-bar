@@ -34,7 +34,6 @@ import {
 } from '../utils/menuStore';
 import { getActiveSeason, setActiveSeason } from '../utils/staffStore';
 import { isCloudConfigured } from '../utils/cloudSync';
-import { isEmailConfigured } from '../utils/emailService';
 import { addEvent, CapannaEvent, deleteEvent, EVENT_TYPES, EventTypeId, eventTypeInfo, getEvents } from '../utils/eventsStore';
 import EmojiPicker from '../components/EmojiPicker';
 
@@ -796,12 +795,6 @@ export default function StaffPortal() {
               title={isCloudConfigured() ? 'Podaci se sinhronizuju sa bazom' : 'Podaci su samo u ovom browseru — popuni src/config.ts za bazu'}
             >
               {isCloudConfigured() ? '● Baza povezana' : '○ Lokalni režim'}
-            </span>
-            <span
-              className={`rounded-full px-3 py-1 text-xs uppercase tracking-wider ${isEmailConfigured() ? 'bg-emerald-500/15 text-emerald-200' : 'bg-white/10 text-white/45'}`}
-              title={isEmailConfigured() ? 'Gosti dobijaju email potvrde' : 'Email potvrde nisu podešene — popuni src/config.ts'}
-            >
-              {isEmailConfigured() ? '● Email aktivan' : '○ Email nije podešen'}
             </span>
             <span className="rounded-full bg-white/10 px-3 py-1 text-xs uppercase tracking-wider">{staff.username} · {roleLabel[staff.role]}</span>
             <button

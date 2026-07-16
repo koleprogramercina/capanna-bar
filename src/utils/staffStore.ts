@@ -1,5 +1,3 @@
-import { sendReservationEmail } from './emailService';
-
 export type StaffRole = 'owner' | 'manager' | 'waiter';
 export type ReservationStatus = 'pending' | 'approved' | 'declined';
 export type SeasonMode = 'city' | 'beach';
@@ -190,17 +188,11 @@ export function createReservation(payload: Omit<ReservationRequest, 'id' | 'stat
     createdAt: new Date().toISOString(),
   };
   saveReservations([reservation, ...getReservations()]);
-  void sendReservationEmail('request', reservation);
   return reservation;
 }
 
 export function updateReservationStatus(id: string, status: ReservationStatus) {
-  const current = getReservations();
-  const target = current.find(item => item.id === id);
-  saveReservations(current.map(item => item.id === id ? { ...item, status, guestNotified: status === 'approved' ? item.guestNotified : false } : item));
-  if (target && status === 'approved' && target.status !== 'approved') {
-    void sendReservationEmail('approved', target);
-  }
+  saveReservations(getReservations().map(item => item.id === id ? { ...item, status, guestNotified: status === 'approved' ? item.guestNotified : false } : item));
 }
 
 export function getActiveSeason(): SeasonMode {

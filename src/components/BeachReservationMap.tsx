@@ -1,6 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { createReservation, getReservations, ReservationRequest } from '../utils/staffStore';
-import { isEmailConfigured } from '../utils/emailService';
 import { eventTypeInfo, getEventsForDate } from '../utils/eventsStore';
 import { beachTables, donjiDividers, isPartyNight, PARTY_CUTOFF, TableSpot, TableZone, zoneLabels } from '../data/tables';
 
@@ -57,7 +56,6 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
   const [reservations, setReservations] = useState<ReservationRequest[]>(getReservations);
   const [selectedTable, setSelectedTable] = useState<TableSpot>(beachTables.find(t => t.zone === 'gornji' && t.reservable) || beachTables[0]);
   const [sent, setSent] = useState(false);
-  const [sentWithEmail, setSentWithEmail] = useState(false);
   const [formError, setFormError] = useState('');
   const [chosenDate, setChosenDate] = useState('');
   const [eventsVersion, setEventsVersion] = useState(0);
@@ -166,7 +164,6 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
     event.currentTarget.reset();
     setChosenDate('');
     setSent(true);
-    setSentWithEmail(Boolean(email) && isEmailConfigured());
     setReservations(getReservations());
   };
 
@@ -325,7 +322,7 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
               <input name="name" required placeholder="Ime i prezime *" className="rounded-xl border border-[#00a896]/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none placeholder:text-white/30" />
               <input name="phone" required type="tel" placeholder="Telefon *" className="rounded-xl border border-[#00a896]/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none placeholder:text-white/30" />
             </div>
-            <input name="email" type="email" placeholder="Email (opciono — za potvrdu rezervacije)" className="w-full rounded-xl border border-[#00a896]/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none placeholder:text-white/30" />
+            <input name="email" type="email" placeholder="Email (opciono)" className="w-full rounded-xl border border-[#00a896]/15 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none placeholder:text-white/30" />
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <input
                 name="date"
@@ -364,9 +361,7 @@ export default function BeachReservationMap({ staffView = false, previewOnly = f
             {formError && <div className="rounded-xl bg-red-500/10 p-3 text-center text-sm text-red-300">{formError}</div>}
             {sent && (
               <div className="rounded-xl bg-emerald-500/10 p-3 text-center text-sm text-emerald-300">
-                {sentWithEmail
-                  ? 'Rezervacija je primljena! Potvrda ti stiže na email — i još jedna kada bude odobrena.'
-                  : '📞 Rezervacija je primljena! Osoblje Capanne će te uskoro pozvati telefonom da potvrdi.'}
+                📞 Rezervacija je primljena! Osoblje Capanne će te uskoro pozvati telefonom da potvrdi.
               </div>
             )}
           </form>
