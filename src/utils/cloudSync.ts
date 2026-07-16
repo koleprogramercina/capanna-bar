@@ -18,6 +18,9 @@ const SYNC_KEYS = [
   'capanna-active-season',
   'capanna-tables',
   'capanna-events',
+  // Nalozi i licencni ključevi osoblja — sinhronizovani da prijava radi na svakom uređaju
+  'capanna-staff-licenses',
+  'capanna-staff-accounts',
 ];
 
 const POLL_INTERVAL_MS = 45_000;

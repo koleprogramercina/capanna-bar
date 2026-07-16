@@ -1,3 +1,5 @@
+import { isCloudConfigured } from './cloudSync';
+
 export type StaffRole = 'owner' | 'manager' | 'waiter';
 export type ReservationStatus = 'pending' | 'approved' | 'declined';
 export type SeasonMode = 'city' | 'beach';
@@ -87,17 +89,21 @@ export function generateId(prefix: string) {
 }
 
 export function ensureStaffSeed() {
+  // Kada je baza povezana, ključevi i nalozi žive u njoj — nikakav lokalni
+  // seed se ne upisuje (da hardkodovani ključ ne bi pregazio prave podatke).
+  if (isCloudConfigured()) return;
+  // Fallback samo za lokalni razvoj bez baze, i to isključivo na prvom pokretanju.
   const licenses = readJson<LicenseKey[]>(LICENSES_KEY, []);
-  if (!licenses.some(item => item.key === 'CAPANNA-OWNER-2026')) {
+  const accounts = readJson<StaffAccount[]>(ACCOUNTS_KEY, []);
+  if (licenses.length === 0 && accounts.length === 0) {
     writeJson<LicenseKey[]>(LICENSES_KEY, [
       {
         key: 'CAPANNA-OWNER-2026',
         role: 'owner',
-        note: 'Initial owner setup key',
+        note: 'Initial owner setup key (samo lokalni dev)',
         active: true,
         createdAt: new Date().toISOString(),
       },
-      ...licenses,
     ]);
   }
 }
